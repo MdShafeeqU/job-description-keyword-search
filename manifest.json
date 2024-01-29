@@ -4,7 +4,13 @@
     "version": "0.1.0",
     "background": {
         "persistent": false,
-        "scripts": [ "script.js" ]
+        "scripts": [ "src/script.js" ]
      },
-    "permissions": [ "contextMenus" ]
+    "permissions": [ 
+      "contextMenus",
+      "http://localhost:8080/" 
+     ],
+     "externally_connectable": {
+      "matches": ["<all_urls>"]
+  }
   }
