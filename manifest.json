@@ -1,0 +1,10 @@
+{
+    "manifest_version": 2,
+    "name": "Skill Search",
+    "version": "0.1.0",
+    "background": {
+        "persistent": false,
+        "scripts": [ "script.js" ]
+     },
+    "permissions": [ "contextMenus" ]
+  }
