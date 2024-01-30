@@ -1,0 +1,116 @@
+Senior Software Engineer
+Apply
+Senior Software Engineer
+Apply
+locations
+AMER - United States - California - San Francisco - One Market
+time type
+Full time
+posted on
+Posted Today
+job requisition id
+23WD73208
+
+Simplify
+Simplify
+12 of 36 keywords
+Beta
+33%
+resume match
+Job Requisition ID #
+
+23WD73208
+Position Overview
+
+The reporting team is looking for an experienced Sr. Software Engineer. You will be reporting to the Engineering Manager of Reporting Team. You will develop software solutions for complex ETL data pipelines and scalable APIs. You will work with Product Managers, Infrastructure, Business Operations, Quality Assurance and other team members to ensure that data is accessible, reliable, and well-structured for reporting. The job location is US - Remote. However, the team is based in San Francisco, CA and it will be hybrid position for bay area candidates.
+
+Responsibilities
+
+Data Pipeline Development:
+
+Develop data pipelines to extract, transform, and load (ETL) data from multiple sources into a centralized data repository
+Improve and refine data pipelines for efficiency, reliability, and scalability
+Monitor and troubleshoot data pipeline issues and ensure data integrity
+We use Python, Airflow, Snowflake, Hive, MySQL, Kinesis, Kafka and AWS (Amazon Web Services)
+API Development:
+
+Develop RESTful APIs & microservices to support multiple operations
+Follow best practices for security, scaling, cost effectiveness and testing
+Create unit and integration tests
+Contribute to documentation on use of the APIs
+Problem Solving:
+
+Resolve technical issues and bugs in applications
+Identify performance bottlenecks and improve code and databases
+Team Collaboration:
+
+Collaborate with engineers, analysts, corss-functional teams and partners to understand data requirements and deliver relevant insights
+Performance Optimization:
+
+Improve data processing and query performance for data retrieval and analytics
+Code Review and Documentation:
+
+Perform code review and provide constructive feedback within ethical boundaries
+Test and Quality Assurance:
+
+Stay up to date with the latest data engineering technologies, and best practices
+Recommend new technologies for data engineering improvements
+Security and Compliance:
+
+Ensure data security by implementing access controls, encryption, and comply with data privacy regulations
+Minimum Qualifications
+
+8+ years of software development experience at multiple capacities
+2+ years of experience in big data technologies (we use Airflow, EMR/Spark, Snowflake, Hadoop/Hive)
+Experience with data streaming (we use Kinesis/Kafka)
+Proficiency in programming languages (we use Python, Java/Scala)
+Experience building RESTful APIs and microservices
+Experience with relational databases (we use MySQL, PostgreSQL)
+Background on cloud technologies. (we use AWS, S3/EBS, Lambda, EKS, CloudWatch)
+You are Familiar with observability platforms (we use Splunk, Datadog)
+Have sound knowledge of design patterns and methodologies across multiple platforms
+Knowledge and support of modern development practices, such as Agile and Open-Source technologies
+Excellent debugging skills.
+Preferred Qualifications
+
+Bachelor's in computer science or equivalent
+Certifications (optional)
+
+AWS Certified Developer - Associate
+Learn More
+
+About Autodesk
+
+Welcome to Autodesk! Amazing things are created every day with our software – from the greenest buildings and cleanest cars to the smartest factories and biggest hit movies. We help innovators turn their ideas into reality, transforming not only how things are made, but what can be made.
+
+ 
+
+We take great pride in our culture here at Autodesk – our Culture Code is at the core of everything we do. Our values and ways of working help our people thrive and realize their potential, which leads to even better outcomes for our customers.
+
+ 
+
+When you’re an Autodesker, you can be your whole, authentic self and do meaningful work that helps build a better future for all. Ready to shape the world and your future? Join us!
+
+Benefits
+
+From health and financial benefits to time away and everyday wellness, we give Autodeskers the best, so they can do their best work. Learn more about our benefits in the U.S. by visiting https://benefits.autodesk.com/
+
+Salary transparency
+
+Salary is one part of Autodesk’s competitive compensation package. For U.S.-based roles, we expect a starting base salary between $109,400 and $188,760. Offers are based on the candidate’s experience and geographic location, and may exceed this range. In addition to base salaries, we also have a significant emphasis on annual cash bonuses, commissions for sales roles, stock grants, and a comprehensive benefits package.
+Equal Employment Opportunity 
+
+At Autodesk, we're building a diverse workplace and an inclusive culture to give more people the chance to imagine, design, and make a better world. Autodesk is proud to be an equal opportunity employer and considers all qualified applicants for employment without regard to race, color, religion, age, sex, sexual orientation, gender, gender identity, national origin, disability, veteran status or any other legally protected characteristic. We also consider for employment all qualified applicants regardless of criminal histories, consistent with applicable law.
+
+Diversity & Belonging
+
+We take pride in cultivating a culture of belonging and an equitable workplace where everyone can thrive. Learn more here: https://www.autodesk.com/company/diversity-and-belonging
+
+Are you an existing contractor or consultant with Autodesk? 
+
+Please search for open jobs and apply internally (not on this external site).
+
+Shape the world, shape your future
+
+ADSKLF
+Welcome to Autodesk! Amazing things 

@@ -1,7 +1,10 @@
 SET UP:
-1. pip install flask
-2. python src/server.py
-3. Load the extension in Chrome
+1. Virtual environment (use gitbash recommended)
+- "conda create -p env python=3.9"
+- "source activate ./env" or "conda activate ./env"
+2. pip install flask
+3. python src/server.py
+4. Load the extension in Chrome
 - "chrome://extensions/" -> Enable Developer Mode -> "Load Unpacked" -> Select the folder
-4. To trigger extension: 
+5. To trigger extension: 
 - Select text from any webpage -> right click -> Select SkillSearch
