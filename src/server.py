@@ -6,7 +6,7 @@ from IPython.display import Markdown
 app = Flask(__name__)
 
 def generate_content(job_description):
-   genai.configure(api_key="AIzaSyD2ut1rrUIzbOSFuW7g-0PT6MGIwjcFAXM")
+   genai.configure(api_key="INSERT API KEY")
    model = genai.GenerativeModel('gemini-pro')
    response = model.generate_content("""I have the following Job Description:
                 {job_description}
