@@ -31,4 +31,5 @@ def process_request():
     return jsonify({'processed_text': processed_text})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    print("I am here")
+    app.run(debug=True, host='0.0.0.0', port=8080)
