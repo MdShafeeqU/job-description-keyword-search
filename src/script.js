@@ -14,7 +14,7 @@ chrome.contextMenus.onClicked.addListener((info) => {
         const tab = tabs[0];
         
         // Send the selected text to the Python server
-        fetch('http://localhost:8080', {
+        fetch('https://keyword-search-bk9w.onrender.com/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
