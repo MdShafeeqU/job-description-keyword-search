@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
 # import textwrap
 import google.generativeai as genai
+from flask_cors import CORS
 # from IPython.display import Markdown
 
 app = Flask(__name__)
+CORS(app)
 
 def generate_content(job_description):
    genai.configure(api_key="AIzaSyD2ut1rrUIzbOSFuW7g-0PT6MGIwjcFAXM")
@@ -29,4 +31,4 @@ def process_request():
     return jsonify({'processed_text': processed_text})
 
 if __name__ == '__main__':
-    app.run(port=8080)
+    app.run(debug=True, port=8080)
