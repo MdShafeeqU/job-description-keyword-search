@@ -1,6 +1,6 @@
 const title = chrome.runtime.getManifest().name;
 let selectedText = "";  // Variable to store the selected text
-
+const API_ROUTE = "https://skill-search-c5xg7z7jka-uc.a.run.app/?{";
 chrome.contextMenus.create({
     id: title,
     title: title,
@@ -14,7 +14,7 @@ chrome.contextMenus.onClicked.addListener((info) => {
         const tab = tabs[0];
         
         // Send the selected text to the Python server
-        fetch('https://keyword-search-bk9w.onrender.com/', {
+        fetch(API_ROUTE, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
