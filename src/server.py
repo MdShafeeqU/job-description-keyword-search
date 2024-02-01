@@ -1,14 +1,14 @@
 from flask import Flask, request, jsonify
-# import textwrap
 import google.generativeai as genai
 from flask_cors import CORS
-# from IPython.display import Markdown
+import os
 
 app = Flask(__name__)
 CORS(app)
 
 def generate_content(job_description):
-   genai.configure(api_key="AIzaSyD2ut1rrUIzbOSFuW7g-0PT6MGIwjcFAXM")
+   GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
+   genai.configure(api_key=GEMINI_API_KEY)
    model = genai.GenerativeModel('gemini-pro')
    
    response = model.generate_content(f"""I have the following Job Description:

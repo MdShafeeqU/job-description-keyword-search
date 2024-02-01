@@ -32,14 +32,22 @@ Develop data pipelines to extract, transform, and load (ETL) data from multiple 
 Improve and refine data pipelines for efficiency, reliability, and scalability
 Monitor and troubleshoot data pipeline issues and ensure data integrity
 We use Python, Airflow, Snowflake, Hive, MySQL, Kinesis, Kafka and AWS (Amazon Web Services)
-API Development: Develop RESTful APIs & microservices to support multiple operations
+API Development:
+
+Develop RESTful APIs & microservices to support multiple operations
 Follow best practices for security, scaling, cost effectiveness and testing
 Create unit and integration tests
 Contribute to documentation on use of the APIs
-Problem Solving: Resolve technical issues and bugs in applications
+Problem Solving:
+
+Resolve technical issues and bugs in applications
 Identify performance bottlenecks and improve code and databases
-Team Collaboration: Collaborate with engineers, analysts, corss-functional teams and partners to understand data requirements and deliver relevant insights
-Performance Optimization: Improve data processing and query performance for data retrieval and analytics
+Team Collaboration:
+
+Collaborate with engineers, analysts, corss-functional teams and partners to understand data requirements and deliver relevant insights
+Performance Optimization:
+
+Improve data processing and query performance for data retrieval and analytics
 Code Review and Documentation:
 
 Perform code review and provide constructive feedback within ethical boundaries
