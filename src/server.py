@@ -15,7 +15,8 @@ def generate_content(job_description):
                 {job_description}
                 Based on the above job description, extract technical keywords that best describe the 
                 skillsets and technologies required for the above job. Pay special attention to programming 
-                languages, tools, and technologies mentioned.
+                languages, tools, and technologies mentioned. Exclude any skills that are not present in the {job_description}. 
+                Ensure consistency in results across multiple tries.
                 Use the following format separated by commas:
                 <keywords>
                 """)
