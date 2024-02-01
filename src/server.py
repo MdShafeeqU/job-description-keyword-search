@@ -10,7 +10,8 @@ CORS(app)
 def generate_content(job_description):
    genai.configure(api_key="AIzaSyD2ut1rrUIzbOSFuW7g-0PT6MGIwjcFAXM")
    model = genai.GenerativeModel('gemini-pro')
-   response = model.generate_content("""I have the following Job Description:
+   
+   response = model.generate_content(f"""I have the following Job Description:
                 {job_description}
                 Based on the above job description, extract technical keywords that best describe the 
                 skillsets and technologies required for the above job. Pay special attention to programming 
