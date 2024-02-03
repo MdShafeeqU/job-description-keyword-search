@@ -7,8 +7,8 @@ app = Flask(__name__)
 CORS(app)
 
 def generate_content(job_description):
-   GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
-   genai.configure(api_key=GEMINI_API_KEY)
+   GEMINI_API_KEY = os.environ.get('')
+   genai.configure(api_key='AIzaSyD2ut1rrUIzbOSFuW7g-0PT6MGIwjcFAXM')
    model = genai.GenerativeModel('gemini-pro')
    
    response = model.generate_content(f"""I have the following Job Description:
