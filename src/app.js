@@ -9,30 +9,68 @@ chrome.runtime.onMessage.addListener((request) => {
 const showModal = (processedText) => {
     console.log("Showing modal with processed text:", processedText);
 
-    const modal = document.createElement("dialog");
+    const modal = document.createElement("div");
+    modal.classList.add("modal");
+
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div style="font-size: 16px; margin-bottom: 20px; line-height: 1.5; color: #333;">${processedText}</div>
+            <button class="close-btn">Close</button>
+        </div>
+    `;
+
     modal.setAttribute(
         "style",`
-        height:450px;
-        border: none;
-        top:150px;
-        border-radius:20px;
-        background-color:white;
-        position: fixed; box-shadow: 0px 12px 48px rgba(29, 5, 64, 0.32);
-        `
+        display: block;
+        padding: 20px;
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        right: 1px;
+        width: 400px; /* Adjust width as needed */
+        height: 100vh;
+        overflow-y: auto;
+        margin: auto;
+        box-sizing: border-box;
+      `
     );
-    
-    modal.innerHTML = `
-        <div>${processedText}</div>
-        <button style="padding: 8px 12px; font-size: 16px; border: none; border-radius: 20px;">Close</button>
-    `;
-    
+
+    modal.querySelector(".modal-content").setAttribute(
+        "style",`
+        background-color: #fefefe;
+        padding: 20px;
+        border: 1px solid #888;
+        border-radius: 0; /* Square corners */
+        width: 100%;
+      `
+    );
+
+    modal.querySelector(".close-btn").setAttribute(
+        "style",`
+        padding: 10px 16px;
+        font-size: 16px;
+        border: none;
+        border-radius: 20px;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      `
+    );
+
     document.body.appendChild(modal);
-    
-    const dialog = document.querySelector("dialog");
-    dialog.showModal();
-    
-    dialog.querySelector("button").addEventListener("click", () => {
+
+    const closeBtn = modal.querySelector(".close-btn");
+
+    closeBtn.addEventListener("click", () => {
         console.log("Closing modal");
-        dialog.close();
+        modal.style.display = "none";
+    });
+
+    // Prevent modal from closing when clicking outside
+    modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            event.stopPropagation();
+        }
     });
 };

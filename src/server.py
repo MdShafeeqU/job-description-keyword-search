@@ -15,10 +15,13 @@ def generate_content(job_description):
                 {job_description}
                 Based on the above job description, extract technical keywords that best describe the 
                 skillsets and technologies required for the above job. Pay special attention to programming 
-                languages, tools, and technologies mentioned. Exclude any skills that are not present in the {job_description}. 
+                languages, tools, and technologies mentioned.  Exclude any skills that are not present in the {job_description}. 
+                List the education (only the degree, no majors) and experience if present in the job description too. 
                 Ensure consistency in results across multiple tries.
-                Use the following format separated by commas:
-                <keywords>
+                Use the following format:
+                Skills: <keywords> 
+                Experience: <number of years>
+                Education: <Degree Type>
                 """)
    return response.text
 
@@ -29,9 +32,8 @@ def process_request():
     selected_text = data.get('text','')
     processed_text = generate_content(selected_text)
 
-    print("Processed Text: ", processed_text)
+    print(processed_text)
     return jsonify({'processed_text': processed_text})
 
 if __name__ == '__main__':
-    print("I am here")
     app.run(debug=True, host='0.0.0.0', port=8080)

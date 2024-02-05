@@ -28,7 +28,7 @@ chrome.contextMenus.onClicked.addListener((info) => {
         .then(data => {
             if (data && data.processed_text) {
                 console.log("Processed Text:", data.processed_text);
-                //alert("Processed Text: " + data.processed_text); 
+                // alert("Processed Text: " + data.processed_text); 
                 chrome.tabs.sendMessage(tab.id, { type: "popup-modal", processedText: data.processed_text });
             } else {
                 console.error("Error processing text. Data:", data);
