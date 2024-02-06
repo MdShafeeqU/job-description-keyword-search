@@ -1,5 +1,6 @@
+// script.js (Background Script)
+
 const title = chrome.runtime.getManifest().name;
-// const API_ROUTE = "https://skill-search-c5xg7z7jka-uc.a.run.app/?{";
 const API_ROUTE = "http://127.0.0.1:8080";
 
 chrome.contextMenus.create({
@@ -15,7 +16,6 @@ chrome.contextMenus.onClicked.addListener((info) => {
         const tab = tabs[0];
         console.log("Selected Text:", selectedText);
 
-        // Send the selected text to the Python server
         fetch(API_ROUTE, {
             method: 'POST',
             headers: {
@@ -23,12 +23,10 @@ chrome.contextMenus.onClicked.addListener((info) => {
             },
             body: JSON.stringify({ text: selectedText }),
         })
-        // Send the processed text back to the chrome extension as an alert
         .then(response => response.json())
         .then(data => {
             if (data && data.processed_text) {
                 console.log("Processed Text:", data.processed_text);
-                // alert("Processed Text: " + data.processed_text); 
                 chrome.tabs.sendMessage(tab.id, { type: "popup-modal", processedText: data.processed_text });
             } else {
                 console.error("Error processing text. Data:", data);
@@ -40,4 +38,14 @@ chrome.contextMenus.onClicked.addListener((info) => {
             alert("Error processing text.");
         });
     });
+});
+
+// Message listener to handle resume upload
+chrome.runtime.onMessage.addListener((request) => {
+    if (request.type === "uploadResume") {
+        // Save resume content to local storage
+        chrome.storage.local.set({ 'resumeContent': request.resumeContent }, function () {
+            console.log(request.resumeContent);
+        });
+    }
 });

@@ -1,26 +1,19 @@
-<!-- index.html -->
+<!-- popup.html -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modal Content</title>
+    <title>Extension Popup</title>
 </head>
 <body>
     <div id="processedTextContainer"></div>
 
-    <script>
-        chrome.runtime.onMessage.addListener((request) => {
-            if (request.type === 'popup-modal') {
-                displayProcessedText(request.processedText);
-            }
-        });
+    <!-- File input and upload button for resume -->
+    <input type="file" id="resumeInput" accept=".txt, .pdf, .doc, .docx" />
+    <button id="resumeUploadButton">Upload Resume</button>
 
-        function displayProcessedText(processedText) {
-            const processedTextContainer = document.getElementById('processedTextContainer');
-            processedTextContainer.textContent = processedText;
-        }
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
