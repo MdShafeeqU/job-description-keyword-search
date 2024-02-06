@@ -14,7 +14,7 @@ const showModal = (processedText) => {
 
     modal.innerHTML = `
         <div class="modal-content">
-            <div style="font-size: 16px; margin-bottom: 20px; line-height: 1.5; color: #333;">${processedText}</div>
+            <div style="font-size: 16px; margin-bottom: 20px; line-height: 1.5; color: #333;">  ${processedText.replace('Experience:', '<br>Experience:').replace('Education:', '<br>Education:')}</div>
             <button class="close-btn">Close</button>
         </div>
     `;
