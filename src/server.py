@@ -2,7 +2,11 @@ from flask import Flask, request, jsonify
 import google.generativeai as genai
 from flask_cors import CORS
 import os
+import nltk
+from nltk.tokenize import word_tokenize
+import re
 
+nltk.download('punkt')
 app = Flask(__name__)
 CORS(app)
 
@@ -25,6 +29,17 @@ def generate_content(job_description):
                 """)
    return response.text
 
+def find_matching_keywords(string1, string2):
+     # Define a regular expression to match only alphabetic characters
+    alpha_regex = re.compile('[^a-zA-Z]+')
+
+    # Tokenize and filter out non-alphabetic characters
+    words1 = set(filter(lambda word: alpha_regex.sub('', word), word_tokenize(string1.lower())))
+    words2 = set(filter(lambda word: alpha_regex.sub('', word), word_tokenize(string2.lower())))
+    
+    matching_keywords = words1.intersection(words2)
+    string = ', '.join(list(matching_keywords))
+    return string
 
 @app.route('/match', methods = ['GET', 'POST'])
 def match_resume():
@@ -34,10 +49,13 @@ def match_resume():
     resume_text = data.get('resumeText','')
     extracted_keywords = data.get('extractedKeywords','')
 
+    res = find_matching_keywords(extracted_keywords, resume_text)
     # print(resume_text)
     # print(extracted_keywords)
     # match_result = do_process(resume_text)
-    return jsonify({'Status': 'Thanks for matching! Matched Keywords will be displayed here. Kindly be patient for this functoinality.'})
+    print(res)
+
+    return jsonify({'Result': res })
 
 @app.route('/', methods = ['GET','POST'])
 def process_request():

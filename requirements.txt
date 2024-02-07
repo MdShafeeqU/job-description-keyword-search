@@ -1,3 +1,4 @@
 flask
 google.generativeai
 flask_cors
+nltk

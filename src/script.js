@@ -78,7 +78,7 @@ chrome.runtime.onMessage.addListener((request) => {
                     })
                     .then(response => response.json())
                     .then(data => {
-                        chrome.tabs.sendMessage(tab.id, { type: "match-display", text: data.Status });
+                        chrome.tabs.sendMessage(tab.id, { type: "match-display", text: data.Result });
                         console.log("Server response: ", data);
                     })
                     .catch(error => {
