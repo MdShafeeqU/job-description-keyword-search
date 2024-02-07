@@ -29,16 +29,19 @@ def generate_content(job_description):
                 """)
    return response.text
 
-def find_matching_keywords(string1, string2):
+def find_matching_keywords(extracted_keywords, resume_text):
      # Define a regular expression to match only alphabetic characters
     alpha_regex = re.compile('[^a-zA-Z]+')
 
     # Tokenize and filter out non-alphabetic characters
-    words1 = set(filter(lambda word: alpha_regex.sub('', word), word_tokenize(string1.lower())))
-    words2 = set(filter(lambda word: alpha_regex.sub('', word), word_tokenize(string2.lower())))
+    keywords  = set(filter(lambda word: alpha_regex.sub('', word), word_tokenize(extracted_keywords.lower())))
+    resume_words  = set(filter(lambda word: alpha_regex.sub('', word), word_tokenize(resume_text.lower())))
     
-    matching_keywords = words1.intersection(words2)
+    matching_keywords = keywords.intersection(resume_words)
+    percentage = (len(keywords.intersection(resume_words)) / len(keywords)) * 100 if len(keywords) > 0 else 0
+    print(percentage)
     string = ', '.join(list(matching_keywords))
+    string = string + "Percentage: "+ str(round(percentage))
     return string
 
 @app.route('/match', methods = ['GET', 'POST'])
