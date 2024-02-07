@@ -25,6 +25,20 @@ def generate_content(job_description):
                 """)
    return response.text
 
+
+@app.route('/match', methods = ['GET', 'POST'])
+def match_resume():
+
+    data = request.get_json()
+
+    resume_text = data.get('resumeText','')
+    extracted_keywords = data.get('extractedKeywords','')
+    
+    # print(resume_text)
+    # print(extracted_keywords)
+    # match_result = do_process(resume_text)
+    return jsonify({'Status': 'OK'})
+
 @app.route('/', methods = ['GET','POST'])
 def process_request():
     data = request.get_json()

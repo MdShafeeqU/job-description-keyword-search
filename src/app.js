@@ -1,4 +1,5 @@
-// content_script.js
+
+let modal;
 
 chrome.runtime.onMessage.addListener((request) => {
     if (request.type === 'popup-modal') {
@@ -10,19 +11,24 @@ chrome.runtime.onMessage.addListener((request) => {
 const showModal = (processedText) => {
     console.log("Showing modal with processed text:", processedText);
 
-    const modal = document.createElement("div");
+    modal = document.createElement("div");
     modal.classList.add("modal");
 
     modal.innerHTML = `
         <div class="modal-content">
-            <div style="font-size: 16px; margin-bottom: 20px; line-height: 1.5; color: #333;">${processedText}</div>
-            <button class="upload-btn">Upload</button>
+            <div style="font-size: 16px; margin-bottom: 20px; line-height: 1.5; color: #333;">${processedText.replace('Experience:', '<br>Experience:').replace('Education:', '<br>Education:')}</div>
+            <button class="add-resume-btn">Add Resume</button>
+            <div class="text-box-container" style="display: none;">
+                <textarea id="resumeText" rows="4" cols="50" style="width: 100%;" placeholder="Enter your resume text here..."></textarea>
+                <button class="upload-btn">Upload</button>
+            </div>
+            <button class="match-btn">Match</button>
             <button class="close-btn">Close</button>
         </div>
     `;
 
     modal.setAttribute(
-        "style",`
+        "style", `
         display: block;
         padding: 20px;
         position: fixed;
@@ -30,7 +36,7 @@ const showModal = (processedText) => {
         top: 0;
         right: 1px;
         width: 400px; /* Adjust width as needed */
-        height: 100vh;
+        height: auto;
         overflow-y: auto;
         margin: auto;
         box-sizing: border-box;
@@ -38,7 +44,7 @@ const showModal = (processedText) => {
     );
 
     modal.querySelector(".modal-content").setAttribute(
-        "style",`
+        "style", `
         background-color: #fefefe;
         padding: 20px;
         border: 1px solid #888;
@@ -47,8 +53,8 @@ const showModal = (processedText) => {
       `
     );
 
-    modal.querySelector(".upload-btn").setAttribute(
-        "style",`
+    modal.querySelector(".add-resume-btn").setAttribute(
+        "style", `
         padding: 10px 16px;
         font-size: 16px;
         border: none;
@@ -61,8 +67,36 @@ const showModal = (processedText) => {
       `
     );
 
+    modal.querySelector(".upload-btn").setAttribute(
+        "style", `
+        padding: 10px 16px;
+        font-size: 16px;
+        border: none;
+        border-radius: 20px;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+        margin-right: 10px;
+        transition: background-color 0.3s;
+      `
+    );
+
+    modal.querySelector(".match-btn").setAttribute(
+        "style", `
+        padding: 10px 16px;
+        font-size: 16px;
+        border: none;
+        border-radius: 20px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        margin-right: 10px;
+        transition: background-color 0.3s;
+      `
+    );
+
     modal.querySelector(".close-btn").setAttribute(
-        "style",`
+        "style", `
         padding: 10px 16px;
         font-size: 16px;
         border: none;
@@ -77,18 +111,36 @@ const showModal = (processedText) => {
     document.body.appendChild(modal);
 
     const closeBtn = modal.querySelector(".close-btn");
+    const addResumeBtn = modal.querySelector(".add-resume-btn");
     const uploadBtn = modal.querySelector(".upload-btn");
+    const matchBtn = modal.querySelector(".match-btn");
+    const textBoxContainer = modal.querySelector(".text-box-container");
 
     closeBtn.addEventListener("click", () => {
         console.log("Closing modal");
         modal.style.display = "none";
     });
 
-    uploadBtn.addEventListener("click", () => {
-        console.log("Uploading resume");
-        triggerFileInput();
+    addResumeBtn.addEventListener("click", () => {
+        console.log("Adding resume");
+        addResumeBtn.style.display = "none";
+        textBoxContainer.style.display = "block";
     });
 
+    uploadBtn.addEventListener("click", () => {
+        console.log("Uploading resume");
+        const resumeText = document.getElementById("resumeText").value;
+        chrome.runtime.sendMessage({ type: "uploadText", enteredText: resumeText });
+        alert('Resume uploaded successfully!');
+        // Revert back to initial state
+        addResumeBtn.style.display = "block";
+        textBoxContainer.style.display = "none";
+    });
+
+    matchBtn.addEventListener("click", () =>{
+        console.log("Matching Resume");
+        chrome.runtime.sendMessage({type: "matchResume"})
+    });
     // Prevent modal from closing when clicking outside
     modal.addEventListener("click", (event) => {
         if (event.target === modal) {
@@ -96,31 +148,3 @@ const showModal = (processedText) => {
         }
     });
 };
-
-function triggerFileInput() {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = '.txt, .pdf, .doc, .docx';
-
-    fileInput.addEventListener('change', handleFileUpload);
-
-    fileInput.click();
-}
-
-function handleFileUpload(event) {
-    const fileInput = event.target;
-    const file = fileInput.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const resumeContent = e.target.result;
-            // Send resume content to background script
-            chrome.runtime.sendMessage({ type: "uploadResume", resumeContent: resumeContent });
-            alert('Resume uploaded successfully!');
-        };
-        reader.readAsText(file);
-    } else {
-        alert('Please select a valid resume file.');
-    }
-}
