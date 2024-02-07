@@ -8,6 +8,21 @@ chrome.runtime.onMessage.addListener((request) => {
     }
 });
 
+chrome.runtime.onMessage.addListener((request) => {
+    if (request.type === 'match-display') {
+        //display request.Status in the modal as a text display
+        displayMatchText(request.text)
+    }
+});
+
+const displayMatchText = (matchText) => {
+    const matchTextContainer = document.createElement("div");
+    matchTextContainer.textContent = matchText;
+
+    // Append the matchTextContainer to the modal content
+    modal.querySelector(".modal-content").appendChild(matchTextContainer);
+};
+
 const showModal = (processedText) => {
     console.log("Showing modal with processed text:", processedText);
 
@@ -40,6 +55,7 @@ const showModal = (processedText) => {
         overflow-y: auto;
         margin: auto;
         box-sizing: border-box;
+        word-wrap: break-word;
       `
     );
 
@@ -49,7 +65,10 @@ const showModal = (processedText) => {
         padding: 20px;
         border: 1px solid #888;
         border-radius: 0; /* Square corners */
+        height: auto;
+        max-height: none;
         width: 100%;
+        word-wrap: break-word;
       `
     );
 

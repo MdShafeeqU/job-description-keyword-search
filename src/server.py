@@ -33,11 +33,11 @@ def match_resume():
 
     resume_text = data.get('resumeText','')
     extracted_keywords = data.get('extractedKeywords','')
-    
+
     # print(resume_text)
     # print(extracted_keywords)
     # match_result = do_process(resume_text)
-    return jsonify({'Status': 'OK'})
+    return jsonify({'Status': 'Thanks for matching! Matched Keywords will be displayed here. Kindly be patient for this functoinality.'})
 
 @app.route('/', methods = ['GET','POST'])
 def process_request():

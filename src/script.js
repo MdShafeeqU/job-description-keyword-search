@@ -63,19 +63,30 @@ chrome.runtime.onMessage.addListener((request) => {
             const enteredText = result.enteredText;
             console.log('Entered text retrieved:', enteredText);
             console.log("Extracted keywords: ", extracted_keywords)
-            fetch("http://127.0.0.1:8080/match",{
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({resumeText: enteredText, extractedKeywords: extracted_keywords}),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Server response: ", data);
-            })
-            .catch(error =>{
-                console.error("Fetch Error: ", error);
+            chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+                // Ensure tabs array is not empty
+                if (tabs.length > 0) {
+                    // Access the first tab in the array (which is the active tab)
+                    var tab = tabs[0];
+
+                    fetch("http://127.0.0.1:8080/match", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ resumeText: enteredText, extractedKeywords: extracted_keywords }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        chrome.tabs.sendMessage(tab.id, { type: "match-display", text: data.Status });
+                        console.log("Server response: ", data);
+                    })
+                    .catch(error => {
+                        console.error("Fetch Error: ", error);
+                    });
+                } else {
+                    console.error("No active tab found.");
+                }
             });
         });
     }
