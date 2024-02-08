@@ -15,7 +15,7 @@ def generate_content(job_description):
     GEMINI_API_KEY = os.environ.get('')
     if not GEMINI_API_KEY:
        raise ValueError("GEMINI_API_KEY environment variable is not set")
-    genai.configure(api_key='AIzaSyD2ut1rrUIzbOSFuW7g-0PT6MGIwjcFAXM')
+    genai.configure(api_key=' ')
     model = genai.GenerativeModel('gemini-pro')
     
     response = model.generate_content(f"""I have the following Job Description:
