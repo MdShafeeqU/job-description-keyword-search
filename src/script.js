@@ -2,7 +2,6 @@
 
 const title = chrome.runtime.getManifest().name;
 const API_ROUTE = "http://127.0.0.1:8080";
-let extracted_keywords;
 
 chrome.contextMenus.create({
     id: title,
@@ -13,31 +12,40 @@ chrome.contextMenus.create({
 chrome.contextMenus.onClicked.addListener((info) => {
     selectedText = info.selectionText;
 
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        const tab = tabs[0];
-        console.log("Selected Text:", selectedText);
+    // Check if data is available in Chrome local storage
+    chrome.storage.local.get('enteredText', function(result) {
+        const resumeText = result.enteredText !== undefined ? result.enteredText : null;
+        
+        console.log("Stored resume: ",resumeText)
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            const tab = tabs[0];
+            console.log("Selected Text:", selectedText);
 
-        fetch(API_ROUTE, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ text: selectedText }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data && data.processed_text) {
-                console.log("Processed Text:", data.processed_text);
-                extracted_keywords = data.processed_text;
-                chrome.tabs.sendMessage(tab.id, { type: "popup-modal", processedText: data.processed_text });
-            } else {
-                console.error("Error processing text. Data:", data);
+            fetch(API_ROUTE, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: selectedText, resumeText: resumeText }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    // console.log("Processed Text:", data.processed_text);
+                    // extracted_keywords = data.processed_text;
+                    chrome.tabs.sendMessage(tab.id, { type: "popup-modal", processedText: data.jd_keywords });
+                    if(resumeText){
+                        chrome.tabs.sendMessage(tab.id, { type: "match-display", text: data.resume_match });
+                    }
+                } else {
+                    console.error("Error processing text. Data:", data);
+                    alert("Error processing text.");
+                }
+            })
+            .catch(error => {
+                console.error("Fetch Error:", error);
                 alert("Error processing text.");
-            }
-        })
-        .catch(error => {
-            console.error("Fetch Error:", error);
-            alert("Error processing text.");
+            });
         });
     });
 });
@@ -54,40 +62,5 @@ chrome.runtime.onMessage.addListener((request) => {
         //     const enteredText = result.enteredText;
         //     console.log('Entered text retrieved:', enteredText);
         // });
-    }
-});
-
-chrome.runtime.onMessage.addListener((request) => {
-    if (request.type === "matchResume") {
-        chrome.storage.local.get('enteredText', function(result) {
-            const enteredText = result.enteredText;
-            console.log('Entered text retrieved:', enteredText);
-            console.log("Extracted keywords: ", extracted_keywords)
-            chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-                // Ensure tabs array is not empty
-                if (tabs.length > 0) {
-                    // Access the first tab in the array (which is the active tab)
-                    var tab = tabs[0];
-
-                    fetch("http://127.0.0.1:8080/match", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ resumeText: enteredText, extractedKeywords: extracted_keywords }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        chrome.tabs.sendMessage(tab.id, { type: "match-display", text: data.Result });
-                        console.log("Server response: ", data);
-                    })
-                    .catch(error => {
-                        console.error("Fetch Error: ", error);
-                    });
-                } else {
-                    console.error("No active tab found.");
-                }
-            });
-        });
     }
 });

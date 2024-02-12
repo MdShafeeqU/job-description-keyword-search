@@ -156,10 +156,6 @@ const showModal = (processedText) => {
         textBoxContainer.style.display = "none";
     });
 
-    matchBtn.addEventListener("click", () =>{
-        console.log("Matching Resume");
-        chrome.runtime.sendMessage({type: "matchResume"})
-    });
     // Prevent modal from closing when clicking outside
     modal.addEventListener("click", (event) => {
         if (event.target === modal) {
