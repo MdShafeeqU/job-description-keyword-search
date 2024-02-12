@@ -72,7 +72,7 @@ web scraping for search results.
 • Utilized the GPT API to process user queries and generate informative responses, enhancing the chatbot's conversational 
 capabilities."""
 
-job_description = """
+jobDescription = """
 Summary
 We are looking for an expert machine learning and data science engineer who can provide the ML services to data scientists, create AI solutions, scale up the ML models, manage the ML Ops, and perform needed governance tasks around deployed models. This person will be the backbone of the AI ML CoE department and will work on new age GenAI solutions. This person should be open to learn and implement new relevant tools and use cases. This person should be able to create the complete solution, so full stack development skill with experience of visualization/UX/UI will help a lot. This person will work in SAFe agile framework, so should have knowledge around it. This person should be very good at communication and in a collaborative environment.
 Responsibilities
@@ -142,12 +142,12 @@ Requirement summary:
 • Experienced in Azure AI technology stack – to use OpenAI
 """
 
-def generateJobTemplate(job_description):
+def generateJobTemplate(jobDescription):
     jobTemplate = f"""I have the following Job Description:
-                {job_description}
+                {jobDescription}
                 Based on the above job description, extract technical keywords that best describe the 
                 skillsets and technologies required for the above job. Pay special attention to programming 
-                languages, tools, and technologies mentioned.  Exclude any skills that are not present in the {job_description}. 
+                languages, tools, and technologies mentioned.  Exclude any skills that are not present in the {jobDescription}. 
                 List the education (only the degree, no majors) and experience if present in the job description too. 
                 Ensure consistency in results across multiple tries.
                 Use the following format:
@@ -166,73 +166,42 @@ def generateResumeTemplate(resume, skillsFromJob):
             {skillsFromJob}"""
     return resumeTemplate
 
-   
-# def generate_content(job_description, resume):
-# #    GEMINI_API_KEY = os.environ.get('')
-#    if "GOOGLE_API_KEY" not in os.environ:
-#     os.environ["GOOGLE_API_KEY"] = "AIzaSyD2ut1rrUIzbOSFuW7g-0PT6MGIwjcFAXM"
-# #    genai.configure(api_key='AIzaSyD2ut1rrUIzbOSFuW7g-0PT6MGIwjcFAXM')
-#    llm = ChatGoogleGenerativeAI(model="gemini-pro")
-   
-#    jobDescriptionPromptTemplate = PromptTemplate(input_variables=["job_description"], template=generateJobTemplate(job_description))
-#    #creating first chain
-#    keywordChain = LLMChain(llm=llm, prompt=jobDescriptionPromptTemplate, output_key="skillsFromJob")
-#    resume_prompt_template = PromptTemplate.from_template(generateResumeTemplate(resume, "{skillsFromJob}"))
-#    resumeChain = LLMChain(llm=llm, prompt=resume_prompt_template, output_key="resumeOutput")
-#    input_data = {
-#     "job_description": job_description,
-#     "resume": resume
-#     }
-#    sequential_chain = SequentialChain(
-#         chains=[keywordChain, resumeChain],
-#         input_variables=["job_description","resume"],
-#         output_variables=["skillsFromJD","resumeOutput"],
-#         verbose=True
-#     )
-#    output_data = sequential_chain(input_data)
-#    return ""
 
 
-def generate_content(job_description, resume):
-    # Set Google API key
+def generate_content(jobDescription, resume):
     if "GOOGLE_API_KEY" not in os.environ:
         os.environ["GOOGLE_API_KEY"] = "AIzaSyD2ut1rrUIzbOSFuW7g-0PT6MGIwjcFAXM"
 
-    # Initialize ChatGoogleGenerativeAI
     llm = ChatGoogleGenerativeAI(model="gemini-pro")
 
-    # Create job description prompt template
-    jobDescriptionPromptTemplate = PromptTemplate(input_variables=["job_description"], template=generateJobTemplate(job_description))
+    # job description prompt template
+    jobDescriptionPromptTemplate = PromptTemplate(input_variables=["jobDescription"], template=generateJobTemplate(jobDescription))
 
-    # Create LLMChain for job description
+    # LLMChain for job description
     keywordChain = LLMChain(llm=llm, prompt=jobDescriptionPromptTemplate, output_key="skillsFromJob")
 
-    # Create resume prompt template
-    resume_prompt_template = PromptTemplate.from_template(generateResumeTemplate(resume, "{skillsFromJob}"))
+    # resume prompt template
+    resumePromptTemplate = PromptTemplate.from_template(generateResumeTemplate(resume, "{skillsFromJob}"))
 
-    # Create LLMChain for resume
-    resumeChain = LLMChain(llm=llm, prompt=resume_prompt_template, output_key="resumeOutput")
+    # LLMChain for resume
+    resumeChain = LLMChain(llm=llm, prompt=resumePromptTemplate, output_key="matchingSkills")
 
-    # Input data for SequentialChain
-    input_data = {
-        "job_description": job_description,
+    inputData = {
+        "jobDescription": jobDescription,
         "resume": resume
     }
 
-    # Create SequentialChain
     sequential_chain = SequentialChain(
         chains=[keywordChain, resumeChain],
-        input_variables=["job_description", "resume"],
-        output_variables=["skillsFromJob", "resumeOutput"],
+        input_variables=["jobDescription", "resume"],
+        output_variables=["skillsFromJob", "matchingSkills"],
         verbose=True
     )
 
-    # Execute SequentialChain
-    output_data = sequential_chain(input_data)
+    output_data = sequential_chain(inputData)
     print(output_data['skillsFromJob'])
-    print(output_data['resumeOutput'])
-    # Optionally, you can return the extracted information or perform additional processing
-    return ""
+    print(output_data['matchingSkills'])
+    return output_data
 
 def find_matching_keywords(extracted_keywords, resume_text):
      # Define a regular expression to match only alphabetic characters
@@ -246,9 +215,6 @@ def find_matching_keywords(extracted_keywords, resume_text):
     resume_words = set(filter(lambda word: alpha_regex.sub('', word) and word.lower() not in exclude_words and not word.isdigit(),
                         word_tokenize(resume_text.lower())))
     
-    # Tokenize and filter out non-alphabetic characters
-    # keywords  = set(filter(lambda word: alpha_regex.sub('', word), word_tokenize(extracted_keywords.lower())))
-    # resume_words  = set(filter(lambda word: alpha_regex.sub('', word), word_tokenize(resume_text.lower())))
     print("Resume_words", resume_words)
     
     matching_keywords = keywords.intersection(resume_words)
@@ -270,14 +236,17 @@ def match_resume():
     res = find_matching_keywords(extracted_keywords, resume_text)
     print(res)
 
-    return jsonify({'Result': res })
+    return jsonify({
+                    "jd_keywords": res["skillsFromJob"], 
+                    "resume_match": res["resumeOutput"]
+                     })
 
 @app.route('/', methods = ['GET','POST'])
 def process_request():
     data = request.get_json()
 
     selected_text = data.get('text','')
-    processed_text = generate_content(job_description, resume)
+    processed_text = generate_content(jobDescription, resume)
 
     print(processed_text)
     return jsonify({'processed_text': processed_text})
