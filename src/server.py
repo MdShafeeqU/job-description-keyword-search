@@ -26,26 +26,9 @@ def generateJobTemplate(jobDescription):
                 Use the following format:
                 Skills: <keywords> 
                 Experience: <number of years>
-                Education: <Degree Type>"""
+                Education: <Degree Type>
+                Return the skills obtained from the job description and nothing else"""
     return jobTemplate
-
-def generateResumeTemplate(resume, skillsFromJob):
-    resumeTemplate = f"""I have the following resume:
-            {resume}
-            Extract technical skills from the above resume. Extract skills that best describe the skillset and technologies that the resume-holder knows.
-            These skills can include programming languages, tools, frameworks and technologies. Exacly match the skills present in resume with the skills present in the given job description.
-            Be very accurate in matching the keywords.
-
-            Here are the skills extracted from the job description:
-            {skillsFromJob}
-
-            Give only the matching keywords. Use following format to return matching keywords seperated by commas:
-            Matching Skills: <keywords> 
-            """
-        
-
-    return resumeTemplate
-
 
 
 def generate_content(jobDescription, resume):
@@ -58,13 +41,27 @@ def generate_content(jobDescription, resume):
     jobDescriptionPromptTemplate = PromptTemplate(input_variables=["jobDescription"], template=generateJobTemplate(jobDescription))
 
     # LLMChain for job description
-    keywordChain = LLMChain(llm=llm, prompt=jobDescriptionPromptTemplate, output_key="skillsFromJob")
+    keywordChain = LLMChain(llm=llm, prompt=jobDescriptionPromptTemplate, output_key="skillsFromJob", verbose=True)
 
+    resumeTemplate = f"""I have the following resume:
+            {resume}
+            Extract t4echnical skills from the above resume. Extract skills that best describe the skillset and technologies that the resume-holder knows.
+            These skills can include programming languages, tools, frameworks and technologies. Exacly match the skills present in resume with the skills 
+            present in the given job description. If resume is empty then dont return nothing.
+            Be very accurate in matching the keywords, if any.
+
+            Here are the skills extracted from the job description:
+            {skillsFromJob}
+
+            Give only the matching keywords. Use following format to return matching keywords seperated by commas:
+            Matching Skills: <keywords> 
+            """
+    
     # resume prompt template
-    resumePromptTemplate = PromptTemplate.from_template(generateResumeTemplate(resume, "{skillsFromJob}"))
+    resumePromptTemplate = PromptTemplate(input_variables=["resume", "skillsFromJob"], template = resumeTemplate)
 
     # LLMChain for resume
-    resumeChain = LLMChain(llm=llm, prompt=resumePromptTemplate, output_key="matchingSkills")
+    resumeChain = LLMChain(llm=llm, prompt=resumePromptTemplate, output_key="matchingSkills", verbose=True)
 
     inputData = {
         "jobDescription": jobDescription,
@@ -73,12 +70,15 @@ def generate_content(jobDescription, resume):
 
     sequential_chain = SequentialChain(
         chains=[keywordChain, resumeChain],
-        input_variables=["jobDescription", "resume"],
+        input_variables=["jobDescription","resume"],
         output_variables=["skillsFromJob", "matchingSkills"],
         verbose=True
     )
 
-    output_data = sequential_chain(inputData)
+    print("Skills from job passed to the second chain:", sequential_chain.input_variables)
+
+
+    output_data = sequential_chain.invoke(input=inputData)
     print(output_data['skillsFromJob'])
     print(output_data['matchingSkills'])
     return output_data
