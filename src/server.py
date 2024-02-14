@@ -35,7 +35,7 @@ def generate_content(jobDescription, resume):
     if "GOOGLE_API_KEY" not in os.environ:
         os.environ["GOOGLE_API_KEY"] = "AIzaSyD2ut1rrUIzbOSFuW7g-0PT6MGIwjcFAXM"
 
-    llm = ChatGoogleGenerativeAI(model="gemini-pro")
+    llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.5)
 
     # job description prompt template
     jobDescriptionPromptTemplate = PromptTemplate(input_variables=["jobDescription"], template=generateJobTemplate(jobDescription))
@@ -43,18 +43,24 @@ def generate_content(jobDescription, resume):
     # LLMChain for job description
     keywordChain = LLMChain(llm=llm, prompt=jobDescriptionPromptTemplate, output_key="skillsFromJob", verbose=True)
 
-    resumeTemplate = f"""I have the following resume:
-            {resume}
-            Extract t4echnical skills from the above resume. Extract skills that best describe the skillset and technologies that the resume-holder knows.
-            These skills can include programming languages, tools, frameworks and technologies. Exacly match the skills present in resume with the skills 
-            present in the given job description. If resume is empty then dont return nothing.
-            Be very accurate in matching the keywords, if any.
+    resumeTemplate = """
+                    Task: Find and match the technical skills obtained from the given resume with the skills obtained from the job description.
+                    Keep these points in mind.
+                    1. Extract all the technical skills from the resume that best describe the skillsets, programming languages, tools and technologies 
+                    that the resume holder knows.
+                    2. Match all the skills that match between the resume and keywords in the job description.
+                    2. The matched skills should be complete.
+                    3. The matched skills should not be repeated.
+                    4. Any skill which is not present in the job description should not be considered while matching.
+                    5. If resume is empty then return nothing.
+                    5. Maintain consistency across multiple tries
+                    6. The matched skills should be comma seperated with the following format.
+                        Matched Skills: <matched skills>
+                    Resume:
+                    {resume}
 
-            Here are the skills extracted from the job description:
-            {skillsFromJob}
-
-            Give only the matching keywords. Use following format to return matching keywords seperated by commas:
-            Matching Skills: <keywords> 
+                    Skills from job description:
+                    {skillsFromJob}
             """
     
     # resume prompt template
@@ -62,11 +68,6 @@ def generate_content(jobDescription, resume):
 
     # LLMChain for resume
     resumeChain = LLMChain(llm=llm, prompt=resumePromptTemplate, output_key="matchingSkills", verbose=True)
-
-    inputData = {
-        "jobDescription": jobDescription,
-        "resume": resume
-    }
 
     sequential_chain = SequentialChain(
         chains=[keywordChain, resumeChain],
@@ -78,7 +79,7 @@ def generate_content(jobDescription, resume):
     print("Skills from job passed to the second chain:", sequential_chain.input_variables)
 
 
-    output_data = sequential_chain.invoke(input=inputData)
+    output_data = sequential_chain.invoke(input={"jobDescription": jobDescription,"resume": resume})
     print(output_data['skillsFromJob'])
     print(output_data['matchingSkills'])
     return output_data
