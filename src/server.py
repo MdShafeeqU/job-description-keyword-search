@@ -42,7 +42,7 @@ def generate_content(jobDescription, resume):
 
     # LLMChain for job description
     keywordChain = LLMChain(llm=llm, prompt=jobDescriptionPromptTemplate, output_key="skillsFromJob", verbose=True)
-
+    
     resumeTemplate = """
                     Task: Find and match the technical skills obtained from the given resume with the skills obtained from the job description.
                     Keep these points in mind.
@@ -91,12 +91,8 @@ def process_request():
     selected_text = data.get('text','')
     resume_text = data.get('resumeText', '')
 
-    # print(selected_text)
-    # print(resume_text)
-
     res = generate_content(selected_text, resume_text)
 
-    # print(processed_text)
     return jsonify({
                     "jd_keywords": res["skillsFromJob"], 
                     "resume_match": res["matchingSkills"]

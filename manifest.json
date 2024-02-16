@@ -14,14 +14,12 @@
         }
       ],
     "background": {
-        "persistent": false,
         "service_worker": "src/script.js"
     },
     "permissions": [ 
         "storage",
         "notifications",
-        "contextMenus",
-        "http://localhost:8080/" 
+        "contextMenus"
     ],
     "externally_connectable": {
         "matches": ["<all_urls>"]
