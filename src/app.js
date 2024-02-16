@@ -26,6 +26,10 @@ const displayMatchText = (matchText) => {
 const showModal = (processedText) => {
     console.log("Showing modal with processed text:", processedText);
 
+    if (modal) {
+        modal.style.display = "none";
+    }
+
     modal = document.createElement("div");
     modal.classList.add("modal");
 
