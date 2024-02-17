@@ -19,4 +19,12 @@ This powerful tool is designed to streamline the job search experience by seamle
 
 ## Visual Walkthrough
 ![image](https://github.com/MdShafeeqU/job-description-keyword-search/assets/50470784/c5ac0964-ceaa-48e9-8fd6-c6799e76b502)
+![image](https://github.com/MdShafeeqU/job-description-keyword-search/assets/50470784/b3bc4ea8-9407-4f38-8aac-fd069331e5b1)
+![image](https://github.com/MdShafeeqU/job-description-keyword-search/assets/50470784/02ffcce7-1029-4fcd-94f1-719c73ee2601)
+
+## Possible Improvements
+- The LLM often gives inconsistent results, as evident from the screenshots.
+-  Sequential processing entails executing tasks one after the other, leading to a cumulative delay in completing operations. 
+
+
 
