@@ -5,11 +5,7 @@ chrome.runtime.onMessage.addListener((request) => {
         console.log("Received message to show modal. Processed Text:", request.processedText);
         showModal(request.processedText);
     }
-});
-
-chrome.runtime.onMessage.addListener((request) => {
-    if (request.type === 'match-display') {
-        //display request.Status in the modal as a text display
+    else if (request.type === 'match-display') {
         displayMatchText(request.text)
     }
 });
@@ -17,17 +13,11 @@ chrome.runtime.onMessage.addListener((request) => {
 const displayMatchText = (matchText) => {
     const matchTextContainer = modal.querySelector(".match-text-container");
     matchTextContainer.textContent = matchText;
-
-    // Append the matchTextContainer to the modal content
-    // modal.querySelector(".modal-content").appendChild(matchTextContainer);
 };
 
 const showModal = (processedText) => {
     console.log("Showing modal with processed text:", processedText);
-
-    if (modal) {
-        modal.style.display = "none";
-    }
+    closeModal();
     
     modal = document.createElement("div");
     modal.classList.add("modal");
@@ -123,31 +113,32 @@ const showModal = (processedText) => {
     const uploadBtn = modal.querySelector(".upload-btn");
     const textBoxContainer = modal.querySelector(".text-box-container");
 
-    closeBtn.addEventListener("click", () => {
-        console.log("Closing modal");
-        modal.style.display = "none";
-    });
-
-    addResumeBtn.addEventListener("click", () => {
-        console.log("Adding resume");
-        addResumeBtn.style.display = "none";
-        textBoxContainer.style.display = "block";
-    });
-
-    uploadBtn.addEventListener("click", () => {
-        console.log("Uploading resume");
-        const resumeText = document.getElementById("resumeText").value;
-        chrome.runtime.sendMessage({ type: "uploadText", enteredText: resumeText });
-        alert('Resume uploaded successfully!');
-        // Revert back to initial state
-        addResumeBtn.style.display = "block";
-        textBoxContainer.style.display = "none";
-    });
-
-    // Prevent modal from closing when clicking outside
     modal.addEventListener("click", (event) => {
-        if (event.target === modal) {
-            event.stopPropagation();
+        const target = event.target;
+        if (target === modal) {
+            event.stopPropagation(); // Prevent modal from closing when clicking outside
+        } else if (target.classList.contains("close-btn")) {
+            console.log("Closing modal");
+            modal.style.display = "none";
+        } else if (target.classList.contains("add-resume-btn")) {
+            console.log("Adding resume");
+            target.style.display = "none";
+            textBoxContainer.style.display = "block";
+        } else if (target.classList.contains("upload-btn")) {
+            console.log("Uploading resume");
+            const resumeText = document.getElementById("resumeText").value;
+            chrome.runtime.sendMessage({ type: "uploadText", enteredText: resumeText });
+            alert('Resume uploaded successfully!');
+            // Revert back to initial state
+            addResumeBtn.style.display = "block";
+            textBoxContainer.style.display = "none";
         }
     });
+};
+
+const closeModal = () => {
+    if (modal) {
+        modal.remove();
+        modal = null;
+    }
 };
