@@ -17,6 +17,7 @@ const processAndDisplayModal = (text, resumeText) => {
         const tab = tabs[0];
         console.log("Selected Text:", text);
 
+        chrome.tabs.sendMessage(tab.id, { type: "loading-modal", processedText: "" });
         fetch(API_ROUTE, {
             method: 'POST',
             headers: {

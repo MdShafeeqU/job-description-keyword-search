@@ -1,18 +1,65 @@
 let modal;
+let loadingModal;
 
 chrome.runtime.onMessage.addListener((request) => {
     if (request.type === 'popup-modal') {
+        closeLoadingModal();
         console.log("Received message to show modal. Processed Text:", request.processedText);
         showModal(request.processedText);
     }
     else if (request.type === 'match-display') {
         displayMatchText(request.text)
     }
+    else if (request.type === 'loading-modal') {
+        showLoadingModal();
+    }
 });
+
+const closeLoadingModal = () => {
+    if (loadingModal) {
+        loadingModal.remove();
+        loadingModal = null;
+    }
+};
+
+const showLoadingModal = () => {
+    closeModal(); // Close any existing modals
+    loadingModal = document.createElement("div");
+    loadingModal.classList.add("modal");
+
+    loadingModal.innerHTML = `
+        <div class="modal-content">
+            <p>Loading...</p>
+        </div>
+    `;
+
+    loadingModal.setAttribute(
+        "style", `
+        display: block;
+        padding: 20px;
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        right: 5px;
+        width: 200px;
+        height: auto;
+        margin: auto;
+        box-sizing: border-box;
+        word-wrap: break-word;
+        background-color: #fefefe;
+        border: 1px solid #888;
+        border-radius: 0;
+      `
+    );
+
+    document.body.appendChild(loadingModal);
+};
 
 const displayMatchText = (matchText) => {
     const matchTextContainer = modal.querySelector(".match-text-container");
     matchTextContainer.textContent = matchText;
+
+    
 };
 
 const showModal = (processedText) => {
@@ -48,6 +95,7 @@ const showModal = (processedText) => {
         margin: auto;
         box-sizing: border-box;
         word-wrap: break-word;
+        border-radius: 10px; 
       `
     );
 
@@ -56,7 +104,7 @@ const showModal = (processedText) => {
         background-color: #fefefe;
         padding: 20px;
         border: 1px solid #888;
-        border-radius: 0; /* Square corners */
+        border-radius: 10px; /* Square corners */
         height: auto;
         max-height: none;
         width: 100%;
