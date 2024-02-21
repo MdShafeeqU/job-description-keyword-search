@@ -8,7 +8,6 @@ import google.generativeai as genai
 from flask_cors import CORS
 import os
 import nltk
-from nltk.tokenize import word_tokenize
 import re
 
 nltk.download('punkt')

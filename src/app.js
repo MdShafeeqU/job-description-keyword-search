@@ -77,15 +77,15 @@ const showModal = (processedText) => {
             </div>
             <div class="match-text-container" style="margin-bottom: 10px;">
             </div> 
-            <button class="add-resume-btn">
+            <button id="resumeButton" class="add-resume-btn">
                 Add Resume
             </button>
             <div class="text-box-container" style="display: none;">
                 <textarea id="resumeText" rows="4" cols="50" style="width: 100%;" placeholder="Enter your resume text here..."></textarea>
-                <button class="upload-btn">
-                    Upload
-                </button>
             </div>
+            <button class="upload-btn">
+                    Upload
+            </button>
             <button class="close-btn">Close</button>
         </div>
     `;
@@ -145,6 +145,7 @@ const showModal = (processedText) => {
 
     modal.querySelector(".upload-btn").setAttribute(
         "style", `
+        display: none; 
         padding: 10px 16px;
         font-size: 16px;
         border: none;
@@ -172,7 +173,6 @@ const showModal = (processedText) => {
 
     document.body.appendChild(modal);
 
-    
     const closeBtn = modal.querySelector(".close-btn");
     const addResumeBtn = modal.querySelector(".add-resume-btn");
     const uploadBtn = modal.querySelector(".upload-btn");
@@ -189,12 +189,14 @@ const showModal = (processedText) => {
             console.log("Adding resume");
             target.style.display = "none";
             textBoxContainer.style.display = "block";
+            uploadBtn.style.display = "inline-block";
         } else if (target.classList.contains("upload-btn")) {
             console.log("Uploading resume");
             const resumeText = document.getElementById("resumeText").value;
             chrome.runtime.sendMessage({ type: "uploadText", enteredText: resumeText });
             alert('Resume uploaded successfully!');
             // Revert back to initial state
+            resumeButton.style.display = none
             addResumeBtn.style.display = "block";
             textBoxContainer.style.display = "none";
         }
