@@ -18,16 +18,15 @@ CORS(app)
 def generateJobTemplate(jobDescription):
     jobTemplate = f"""I have the following Job Description:
                 {jobDescription}
-                Based on the above job description, extract technical keywords that best describe the 
-                skillsets and technologies required for the above job. Pay special attention to programming 
-                languages, tools, and technologies mentioned.  Exclude any skills that are not present in the {jobDescription}. 
-                List the education (only the degree, no majors) and experience if present in the job description too. 
+                Based on the above job description, we need to extract technical keywords, education (only the degree, no majors) and experience. The technical keywords should
+                best describe the programming languages, tools, frameworks, and technologies present in the job description. Do not list any skill or technologies that is not present 
+                in the job description.
                 Ensure consistency in results across multiple tries.
-                Use the following format:
+                Use the following format strictly:
                 Skills: <keywords> 
                 Experience: <number of years>
                 Education: <Degree Type>
-                Return the skills obtained from the job description and nothing else"""
+                Return the skills, experience and education obtained from the job description and nothing else"""
     return jobTemplate
 
 
@@ -44,18 +43,12 @@ def generate_content(jobDescription, resume):
     keywordChain = LLMChain(llm=llm, prompt=jobDescriptionPromptTemplate, output_key="skillsFromJob", verbose=True)
     
     resumeTemplate = """
-                    Task: Find and match the technical skills obtained from the given resume with the skills obtained from the job description.
+                    Find and match the technical skills obtained from the resume with the skills obtained from the job description.
                     Keep these points in mind.
-                    1. Extract all the technical skills from the resume that best describe the skillsets, programming languages, tools and technologies 
-                    that the resume holder knows.
-                    2. Match all the skills that match between the resume and keywords in the job description.
-                    2. The matched skills should be complete.
-                    3. The matched skills should not be repeated.
-                    4. Any skill which is not present in the job description should not be considered while matching.
-                    5. If resume is empty then return nothing.
-                    5. Maintain consistency across multiple tries
-                    6. The matched skills should be comma seperated with the following format.
-                        Matched Skills: <matched skills>
+                    Extract all the technical skills like programming languages, tools, technologies, frameworks and keywords from the resume. Then match all the skills that 
+                    match between the resume and keywords in the job description. The matched skills should be complete and should not be repeated. Any skill which is not present 
+                    in the job description should not be considered while matching. Please maintain consistency across multiple tries. The matched skills should be comma seperated in this format:
+                    Matched Skills: <matched skills>
                     Resume:
                     {resume}
 

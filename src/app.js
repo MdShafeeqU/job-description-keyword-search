@@ -71,16 +71,33 @@ const showModal = (processedText) => {
 
     modal.innerHTML = `
         <div class="modal-content">
-            <div style="font-size: 16px; margin-bottom: 20px; line-height: 1.5; color: #333;">${processedText.replace('Experience:', '<br>Experience:').replace('Education:', '<br>Education:')}</div>
-            <div class="match-text-container" style="margin-bottom: 10px;"></div> 
-            <button class="add-resume-btn">Add Resume</button>
+            <div class="processed-text">${processedText.replace('Skills:', '<strong>Skills:</strong>')
+                                                    .replace('Experience:', '<strong><br>Experience:</strong>')
+                                                    .replace('Education:', '<strong><br>Education:</strong>')}
+            </div>
+            <div class="match-text-container" style="margin-bottom: 10px;">
+            </div> 
+            <button class="add-resume-btn">
+                Add Resume
+            </button>
             <div class="text-box-container" style="display: none;">
                 <textarea id="resumeText" rows="4" cols="50" style="width: 100%;" placeholder="Enter your resume text here..."></textarea>
-                <button class="upload-btn">Upload</button>
+                <button class="upload-btn">
+                    Upload
+                </button>
             </div>
             <button class="close-btn">Close</button>
         </div>
     `;
+
+    modal.querySelector(".processed-text").setAttribute(
+        "style", `
+        font-size: 16px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+        color: #333;
+        `
+    )
 
     modal.setAttribute(
         "style", `
