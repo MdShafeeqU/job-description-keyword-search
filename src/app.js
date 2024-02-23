@@ -55,12 +55,10 @@ const showLoadingModal = () => {
     document.body.appendChild(loadingModal);
 };
 
-const displayMatchText = (matchText) => {
-    const matchTextContainer = modal.querySelector(".match-text-container");
-    matchTextContainer.textContent = matchText;
-
-    
-};
+    const displayMatchText = (matchText) => {
+        const matchTextContainer = modal.querySelector(".match-text-container");
+        matchTextContainer.innerHTML = matchText.replace('Matched Skills:','<strong><br>Matched Skills:</strong>');
+    };
 
 const showModal = (processedText) => {
     console.log("Showing modal with processed text:", processedText);
@@ -73,7 +71,8 @@ const showModal = (processedText) => {
         <div class="modal-content">
             <div class="processed-text">${processedText.replace('Skills:', '<strong>Skills:</strong>')
                                                     .replace('Experience:', '<strong><br>Experience:</strong>')
-                                                    .replace('Education:', '<strong><br>Education:</strong>')}
+                                                    .replace('Education:', '<strong><br>Education:</strong>')
+                                                    }
             </div>
             <div class="match-text-container" style="margin-bottom: 10px;">
             </div> 
@@ -81,7 +80,7 @@ const showModal = (processedText) => {
                 Add Resume
             </button>
             <div class="text-box-container" style="display: none;">
-                <textarea id="resumeText" rows="4" cols="50" style="width: 100%;" placeholder="Enter your resume text here..."></textarea>
+                <textarea id="resumeText" rows="4" cols="50" style="width: 100%;" placeholder="Copy & paste your resume here..."></textarea>
             </div>
             <button class="upload-btn">
                     Upload
