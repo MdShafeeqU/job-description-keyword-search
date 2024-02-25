@@ -92,12 +92,6 @@ const showLoadingModal = () => {
 };
 
 
-
-
-
-
-
-
 const displayMatchText = (matchText) => {
     const matchTextContainer = modal.querySelector(".match-text-container");
     matchTextContainer.innerHTML = matchText.replace('Matched Skills:','<strong><br>Matched Skills:</strong>');

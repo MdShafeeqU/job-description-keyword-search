@@ -28,19 +28,7 @@ def generateJobTemplate(jobDescription):
                 Return the skills, experience and education obtained from the job description and nothing else"""
     return jobTemplate
 
-
-def generate_content(jobDescription, resume):
-    if "GOOGLE_API_KEY" not in os.environ:
-        os.environ["GOOGLE_API_KEY"] = "AIzaSyD2ut1rrUIzbOSFuW7g-0PT6MGIwjcFAXM"
-
-    llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.5)
-
-    # job description prompt template
-    jobDescriptionPromptTemplate = PromptTemplate(input_variables=["jobDescription"], template=generateJobTemplate(jobDescription))
-
-    # LLMChain for job description
-    keywordChain = LLMChain(llm=llm, prompt=jobDescriptionPromptTemplate, output_key="skillsFromJob", verbose=True)
-    
+def generateResumeTemplate(resume):
     resumeTemplate = """
                     Find and match the technical skills obtained from the resume with the skills obtained from the job description.
                     Keep these points in mind.
@@ -54,9 +42,22 @@ def generate_content(jobDescription, resume):
                     Skills from job description:
                     {skillsFromJob}
             """
+    return resumeTemplate
+
+def generate_content(jobDescription, resume):
+    if "GOOGLE_API_KEY" not in os.environ:
+        os.environ["GOOGLE_API_KEY"] = "AIzaSyD2ut1rrUIzbOSFuW7g-0PT6MGIwjcFAXM"
+
+    llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.5)
+
+    # job description prompt template
+    jobDescriptionPromptTemplate = PromptTemplate(input_variables=["jobDescription"], template=generateJobTemplate(jobDescription))
+
+    # LLMChain for job description
+    keywordChain = LLMChain(llm=llm, prompt=jobDescriptionPromptTemplate, output_key="skillsFromJob", verbose=True)
     
     # resume prompt template
-    resumePromptTemplate = PromptTemplate(input_variables=["resume", "skillsFromJob"], template = resumeTemplate)
+    resumePromptTemplate = PromptTemplate(input_variables=["resume", "skillsFromJob"], template = generateResumeTemplate(resume))
 
     # LLMChain for resume
     resumeChain = LLMChain(llm=llm, prompt=resumePromptTemplate, output_key="matchingSkills", verbose=True)
