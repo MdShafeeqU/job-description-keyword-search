@@ -1,6 +1,25 @@
 let modal;
 let loadingModal;
 
+// Add a simple CSS animation for the loading spinner
+const styleTag = document.createElement("style");
+styleTag.innerHTML = `
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .loading-spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+    }
+`;
+
+document.head.appendChild(styleTag);
+
 chrome.runtime.onMessage.addListener((request) => {
     if (request.type === 'popup-modal') {
         closeLoadingModal();
@@ -27,38 +46,62 @@ const showLoadingModal = () => {
     loadingModal = document.createElement("div");
     loadingModal.classList.add("modal");
 
+    // Add a simple CSS animation for the loading spinner
+    const styleTag = document.createElement("style");
+    styleTag.innerHTML = `
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-spinner {
+            margin: 0 auto; /* Center the spinner horizontally */
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+    `;
+    document.head.appendChild(styleTag);
+
     loadingModal.innerHTML = `
         <div class="modal-content">
-            <p>Loading...</p>
+            <div class="loading-spinner"></div>
+            <p>Loading..</p>
         </div>
     `;
 
-    loadingModal.setAttribute(
-        "style", `
-        display: block;
-        padding: 20px;
+    loadingModal.style.cssText = `
         position: fixed;
         z-index: 9999;
         top: 0;
         right: 5px;
         width: 200px;
-        height: auto;
-        margin: auto;
+        padding: 20px;
         box-sizing: border-box;
-        word-wrap: break-word;
         background-color: #fefefe;
         border: 1px solid #888;
-        border-radius: 0;
-      `
-    );
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    `;
+
+    loadingModal.querySelector(".modal-content").style.textAlign = "center";
 
     document.body.appendChild(loadingModal);
 };
 
-    const displayMatchText = (matchText) => {
-        const matchTextContainer = modal.querySelector(".match-text-container");
-        matchTextContainer.innerHTML = matchText.replace('Matched Skills:','<strong><br>Matched Skills:</strong>');
-    };
+
+
+
+
+
+
+
+const displayMatchText = (matchText) => {
+    const matchTextContainer = modal.querySelector(".match-text-container");
+    matchTextContainer.innerHTML = matchText.replace('Matched Skills:','<strong><br>Matched Skills:</strong>');
+};
 
 const showModal = (processedText) => {
     console.log("Showing modal with processed text:", processedText);
