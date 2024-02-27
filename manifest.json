@@ -19,7 +19,6 @@
         "service_worker": "src/script.js"
     },
     "permissions": [ 
-        "storage",
         "notifications",
         "contextMenus"
     ],
