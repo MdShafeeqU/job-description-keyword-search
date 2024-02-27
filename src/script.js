@@ -1,5 +1,5 @@
+
 const title = chrome.runtime.getManifest().name;
-// const API_ROUTE = "https://skill-search-c5xg7z7jka-uc.a.run.app/?{";
 const API_ROUTE = "http://127.0.0.1:8080";
 
 chrome.contextMenus.create({
@@ -24,7 +24,6 @@ const processAndDisplayModal = (text, resumeText) => {
             },
             body: JSON.stringify({ text: text, resumeText: resumeText }),
         })
-        // Send the processed text back to the chrome extension
         .then(response => response.json())
         .then(data => {
             if (data) {

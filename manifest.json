@@ -3,12 +3,17 @@
     "name": "Skill Search",
     "version": "0.1.0",
     "description": "Seamlessly match keywords from job descriptions to your resume, optimizing your profile for the perfect career fit.",
+    "icons": {
+        "16": "src/logo.png",
+        "48": "src/logo.png",
+        "128": "src/logo.png"
+    },
     "action": {
         "default_icon": "src/logo.png"
     },
     "content_scripts": [
         {
-          "matches": ["http://*/*", "https://*/*"],
+          "matches": ["http:///", "https:///"],
           "js": [
             "src/app.js"
           ]
@@ -18,6 +23,7 @@
         "service_worker": "src/script.js"
     },
     "permissions": [ 
+        "storage",
         "notifications",
         "contextMenus"
     ],

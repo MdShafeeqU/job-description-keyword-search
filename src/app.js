@@ -200,7 +200,7 @@ const showModal = (processedText) => {
         font-size: 16px;
         border: none;
         border-radius: 20px;
-        background-color: #4CAF50;
+        background-color: #f44336;
         color: white;
         cursor: pointer;
         transition: background-color 0.3s;

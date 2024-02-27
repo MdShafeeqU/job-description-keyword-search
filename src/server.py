@@ -6,17 +6,13 @@ from langchain.chains import SequentialChain
 
 import google.generativeai as genai
 from flask_cors import CORS
-import logging
 import os
 import nltk
 import re
 
 nltk.download('punkt')
-app = Flask(__name__)
+app = Flask(_name_)
 CORS(app)
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 def generateJobTemplate(jobDescription):
     jobTemplate = f"""I have the following Job Description:
@@ -83,18 +79,14 @@ def generate_content(jobDescription, resume):
 
 @app.route('/', methods = ['GET','POST'])
 def process_request():
-    try:
-        data = request.get_json()
-
+    data = request.get_json()
     selected_text = data.get('text','')
     resume_text = data.get('resumeText', '')
-
     res = generate_content(selected_text, resume_text)
-
-    return jsonify({
+    return jsonify(
                     "jd_keywords": res["skillsFromJob"], 
                     "resume_match": res["matchingSkills"]
                      })
 
-if __name__ == '__main__':
+if _name_ == '_main_':
     app.run(debug=True, host='0.0.0.0', port=8080)
