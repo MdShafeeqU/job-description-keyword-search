@@ -117,7 +117,7 @@ const showModal = (processedText) => {
                 Add Resume
             </button>
             <div class="text-box-container" style="display: none;">
-                <textarea id="resumeText" rows="4" cols="50" style="width: 100%;" placeholder="Copy & paste your resume here..."></textarea>
+                <textarea id="resumeText" rows="4" cols="50" style="width: 100%;" placeholder="Enter your resume here..."></textarea>
             </div>
             <button class="upload-btn">
                     Upload

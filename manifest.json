@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "Skill Search",
-    "version": "0.1.0",
-    "description": "Seamlessly match keywords from job descriptions to your resume, optimizing your profile for the perfect career fit.",
+    "name": "Skill Sync",
+    "version": "1.0.0",
+    "description": "Enhance your job search by finding technical skills in job description and matching them with your resume",
     "icons": {
         "16": "src/logo.png",
         "48": "src/logo.png",
