@@ -11,7 +11,7 @@ import nltk
 import re
 
 nltk.download('punkt')
-app = Flask(_name_)
+app = Flask(__name__)
 CORS(app)
 
 def generateJobTemplate(jobDescription):
@@ -83,10 +83,10 @@ def process_request():
     selected_text = data.get('text','')
     resume_text = data.get('resumeText', '')
     res = generate_content(selected_text, resume_text)
-    return jsonify(
+    return jsonify({
                     "jd_keywords": res["skillsFromJob"], 
                     "resume_match": res["matchingSkills"]
                      })
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8080)
