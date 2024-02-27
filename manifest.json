@@ -4,7 +4,6 @@
     "version": "0.1.0",
     "description": "Seamlessly match keywords from job descriptions to your resume, optimizing your profile for the perfect career fit.",
     "action": {
-        "default_popup": "src/index.html",
         "default_icon": "src/logo.png"
     },
     "content_scripts": [
