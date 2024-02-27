@@ -1,52 +1,201 @@
-// content_script.js
+let modal;
+let loadingModal;
+
+// Add a simple CSS animation for the loading spinner
+const styleTag = document.createElement("style");
+styleTag.innerHTML = `
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .loading-spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+    }
+`;
+
+document.head.appendChild(styleTag);
+
 chrome.runtime.onMessage.addListener((request) => {
     if (request.type === 'popup-modal') {
+        closeLoadingModal();
         console.log("Received message to show modal. Processed Text:", request.processedText);
         showModal(request.processedText);
     }
+    else if (request.type === 'match-display') {
+        displayMatchText(request.text)
+    }
+    else if (request.type === 'loading-modal') {
+        showLoadingModal();
+    }
 });
+
+const closeLoadingModal = () => {
+    if (loadingModal) {
+        loadingModal.remove();
+        loadingModal = null;
+    }
+};
+
+const showLoadingModal = () => {
+    closeModal(); // Close any existing modals
+    loadingModal = document.createElement("div");
+    loadingModal.classList.add("modal");
+
+    // Add a simple CSS animation for the loading spinner
+    const styleTag = document.createElement("style");
+    styleTag.innerHTML = `
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-spinner {
+            margin: 0 auto; /* Center the spinner horizontally */
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+    `;
+    document.head.appendChild(styleTag);
+
+    loadingModal.innerHTML = `
+        <div class="modal-content">
+            <div class="loading-spinner"></div>
+            <p>Loading..</p>
+        </div>
+    `;
+
+    loadingModal.style.cssText = `
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        right: 5px;
+        width: 200px;
+        padding: 20px;
+        box-sizing: border-box;
+        background-color: #fefefe;
+        border: 1px solid #888;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    `;
+
+    loadingModal.querySelector(".modal-content").style.textAlign = "center";
+
+    document.body.appendChild(loadingModal);
+};
+
+
+const displayMatchText = (matchText) => {
+    const matchTextContainer = modal.querySelector(".match-text-container");
+    matchTextContainer.innerHTML = matchText.replace('Matched Skills:','<strong><br>Matched Skills:</strong>');
+};
 
 const showModal = (processedText) => {
     console.log("Showing modal with processed text:", processedText);
-
-    const modal = document.createElement("div");
+    closeModal();
+    
+    modal = document.createElement("div");
     modal.classList.add("modal");
 
     modal.innerHTML = `
         <div class="modal-content">
-            <div style="font-size: 16px; margin-bottom: 20px; line-height: 1.5; color: #333;">  ${processedText.replace('Experience:', '<br>Experience:').replace('Education:', '<br>Education:')}</div>
+            <div class="processed-text">${processedText.replace('Skills:', '<strong>Skills:</strong>')
+                                                    .replace('Experience:', '<strong><br>Experience:</strong>')
+                                                    .replace('Education:', '<strong><br>Education:</strong>')
+                                                    }
+            </div>
+            <div class="match-text-container" style="margin-bottom: 10px;">
+            </div> 
+            <button id="resumeButton" class="add-resume-btn">
+                Add Resume
+            </button>
+            <div class="text-box-container" style="display: none;">
+                <textarea id="resumeText" rows="4" cols="50" style="width: 100%;" placeholder="Copy & paste your resume here..."></textarea>
+            </div>
+            <button class="upload-btn">
+                    Upload
+            </button>
             <button class="close-btn">Close</button>
         </div>
     `;
 
+    modal.querySelector(".processed-text").setAttribute(
+        "style", `
+        font-size: 16px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+        color: #333;
+        `
+    )
+
     modal.setAttribute(
-        "style",`
+        "style", `
         display: block;
         padding: 20px;
         position: fixed;
         z-index: 9999;
         top: 0;
-        right: 1px;
+        right: 5px;
         width: 400px; /* Adjust width as needed */
-        height: 100vh;
-        overflow-y: auto;
+        height: auto;
         margin: auto;
         box-sizing: border-box;
+        word-wrap: break-word;
+        border-radius: 10px; 
       `
     );
 
     modal.querySelector(".modal-content").setAttribute(
-        "style",`
+        "style", `
         background-color: #fefefe;
         padding: 20px;
         border: 1px solid #888;
-        border-radius: 0; /* Square corners */
+        border-radius: 10px; /* Square corners */
+        height: auto;
+        max-height: none;
         width: 100%;
+        word-wrap: break-word;
+      `
+    );
+
+    modal.querySelector(".add-resume-btn").setAttribute(
+        "style", `
+        padding: 10px 16px;
+        font-size: 16px;
+        border: none;
+        border-radius: 20px;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+        margin-right: 10px;
+        transition: background-color 0.3s;
+      `
+    );
+
+    modal.querySelector(".upload-btn").setAttribute(
+        "style", `
+        display: none; 
+        padding: 10px 16px;
+        font-size: 16px;
+        border: none;
+        border-radius: 20px;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+        margin-right: 10px;
+        transition: background-color 0.3s;
       `
     );
 
     modal.querySelector(".close-btn").setAttribute(
-        "style",`
+        "style", `
         padding: 10px 16px;
         font-size: 16px;
         border: none;
@@ -61,16 +210,38 @@ const showModal = (processedText) => {
     document.body.appendChild(modal);
 
     const closeBtn = modal.querySelector(".close-btn");
+    const addResumeBtn = modal.querySelector(".add-resume-btn");
+    const uploadBtn = modal.querySelector(".upload-btn");
+    const textBoxContainer = modal.querySelector(".text-box-container");
 
-    closeBtn.addEventListener("click", () => {
-        console.log("Closing modal");
-        modal.style.display = "none";
-    });
-
-    // Prevent modal from closing when clicking outside
     modal.addEventListener("click", (event) => {
-        if (event.target === modal) {
-            event.stopPropagation();
+        const target = event.target;
+        if (target === modal) {
+            event.stopPropagation(); // Prevent modal from closing when clicking outside
+        } else if (target.classList.contains("close-btn")) {
+            console.log("Closing modal");
+            modal.style.display = "none";
+        } else if (target.classList.contains("add-resume-btn")) {
+            console.log("Adding resume");
+            target.style.display = "none";
+            textBoxContainer.style.display = "block";
+            uploadBtn.style.display = "inline-block";
+        } else if (target.classList.contains("upload-btn")) {
+            console.log("Uploading resume");
+            const resumeText = document.getElementById("resumeText").value;
+            chrome.runtime.sendMessage({ type: "uploadText", enteredText: resumeText });
+            alert('Resume uploaded successfully!');
+            // Revert back to initial state
+            resumeButton.style.display = none
+            addResumeBtn.style.display = "block";
+            textBoxContainer.style.display = "none";
         }
     });
+};
+
+const closeModal = () => {
+    if (modal) {
+        modal.remove();
+        modal = null;
+    }
 };
