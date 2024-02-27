@@ -46,7 +46,7 @@ def generateResumeTemplate(resume):
 
 def generate_content(jobDescription, resume):
     if "GOOGLE_API_KEY" not in os.environ:
-        os.environ["GOOGLE_API_KEY"] = "AIzaSyD2ut1rrUIzbOSFuW7g-0PT6MGIwjcFAXM"
+        os.environ["GOOGLE_API_KEY"] = ""
 
     llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.5)
 
